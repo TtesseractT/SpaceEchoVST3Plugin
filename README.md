@@ -1,12 +1,9 @@
 # SpaceEchoVST3Plugin
-.
+
 **// ADVISE RUN PLUGIN ON REAPER!**
 **// ADVISE RUN PLUGIN ON REAPER!**
 I cant stress this enough (see item 2 for details).
-.
-.
 This project was created for the purpose of creating a delay based plugin
-
 Some issued to clarify.
 
 [1]
