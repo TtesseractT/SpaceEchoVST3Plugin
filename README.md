@@ -14,4 +14,8 @@ Some issued to clarify.
 - Audio can be clipped very easily due to their not being a limiter as of yet installed on the pluging 
   be aware that this plugin will Clip if not correctly set. Currently working on a feed forward limiter this will be implemented soon.
   
-
+[HowTo]
+- Copy and paste the VST3 file into the plugin directory of any DAW.
+- For code, Aspik framework will be required ASPiK Plugin Kernel 
+    		- http://www.aspikplugins.com
+    		- http://www.willpirkle.com
