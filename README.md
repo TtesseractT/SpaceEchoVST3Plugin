@@ -1,5 +1,5 @@
 # SpaceEchoVST3Plugin
-
+![Screenshot](SPACEECHO.JPG)
 **// ADVISE RUN PLUGIN ON REAPER!**
 **// ADVISE RUN PLUGIN ON REAPER!**
 I cant stress this enough (see item 2 for details).
