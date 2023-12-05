@@ -9,8 +9,8 @@
 DeZipper::DeZipper()
 {
     m_DZMM = 0.0;
-    m_DZFB = 0.999;     //FB Coef
-    m_DZFF = 1 - m_DZFB;  //FF Coef for 0dB passband gain
+    m_DZFB = 0.999;           //FB Coef
+    m_DZFF = 1 - m_DZFB;      //FF Coef for 0dB passband gain
 }
 //-----------------------------------------------------
 double DeZipper::smooth(double sample)
