@@ -56,45 +56,45 @@ bool PluginCore::reset(ResetInfo& resetInfo)
 	m_Release.prepareForPlayback(getSampleRate());			//
 
 	// -- Filters ---------------------------- //
-	z1L = z2L = z1R = z2R = 0.0;							// Resets Variables used in the Filter stage. 
+	z1L = z2L = z1R = z2R = 0.0;					// Resets Variables used in the Filter stage. 
 
 	// -- Delay Block 1----------------------- //
-	rPtr = wPtr = 0;										// Resets the Write, Read pointer to 0, for Left.
-	rPtrI = wPtrI = 0;										// Resets the Write, Read pointer to 0, for Right.
+	rPtr = wPtr = 0;						// Resets the Write, Read pointer to 0, for Left.
+	rPtrI = wPtrI = 0;						// Resets the Write, Read pointer to 0, for Right.
 	memset(dBlock, 0, maxDelay * sizeof(float));			// Resets the memory buffer used in dBlock to 0 referencing the maxDelay. Process for Left Channel.
 	memset(dBlockI, 0, maxDelay * sizeof(float));			// Resets the memory buffer used in dBlockI to 0 referencing the maxDelay. Process for Right Channel.
-	delay = maxDelay * delayVar;							// Redefention of delay with variables used outside ( PluginCore::reset(ResetInfo& resetInfo) ).
+	delay = maxDelay * delayVar;					// Redefention of delay with variables used outside ( PluginCore::reset(ResetInfo& resetInfo) ).
 
 	// -- Delay Block 2----------------------- //
-	rPtr2L = wPtr2L = 0;									// Same As Delay Block 1.
-	rPtr2R = wPtr2R = 0;									// Same As Delay Block 1.
+	rPtr2L = wPtr2L = 0;						// Same As Delay Block 1.
+	rPtr2R = wPtr2R = 0;						// Same As Delay Block 1.
 	memset(dBlock2L, 0, maxDelay2 * sizeof(float));			// Same As Delay Block 1.
 	memset(dBlock2R, 0, maxDelay2 * sizeof(float));			// Same As Delay Block 1.
-	delay2 = maxDelay2 * delayVar2;							// Same As Delay Block 1.
+	delay2 = maxDelay2 * delayVar2;					// Same As Delay Block 1.
 
 	// -- Delay Block 3----------------------- //
-	rPtr3L = wPtr3L = 0;									// Same As Delay Block 1.
-	rPtr3R = wPtr3R = 0;									// Same As Delay Block 1.
+	rPtr3L = wPtr3L = 0;						// Same As Delay Block 1.
+	rPtr3R = wPtr3R = 0;						// Same As Delay Block 1.
 	memset(dBlock3L, 0, maxDelay3 * sizeof(float));			// Same As Delay Block 1.
 	memset(dBlock3R, 0, maxDelay3 * sizeof(float));			// Same As Delay Block 1.
-	delay3 = maxDelay3 * delayVar3;							// Same As Delay Block 1.
+	delay3 = maxDelay3 * delayVar3;					// Same As Delay Block 1.
 
 	// -- Delay Block 4----------------------- //
-	rPtr4L = wPtr4L = 0;									// Same As Delay Block 1.
-	rPtr4R = wPtr4R = 0;									// Same As Delay Block 1.
+	rPtr4L = wPtr4L = 0;						// Same As Delay Block 1.
+	rPtr4R = wPtr4R = 0;						// Same As Delay Block 1.
 	memset(dBlock4L, 0, maxDelay4 * sizeof(float));			// Same As Delay Block 1.
 	memset(dBlock4R, 0, maxDelay4 * sizeof(float));			// Same As Delay Block 1.
-	delay4 = maxDelay4 * delayVar4;							// Same As Delay Block 1.
+	delay4 = maxDelay4 * delayVar4;					// Same As Delay Block 1.
 
 	//Echo Block 1---------------------------- //
-	erP1L = ewP1L = 0;										// Same As Delay Block 1.
-	erP2L = ewP2L = 0;										// Same As Delay Block 1.
-	erP3L = ewP3L = 0;										// Same As Delay Block 1.
-	erP4L = ewP4L = 0;										// Same As Delay Block 1.
-	erP5L = ewP5L = 0;										// Same As Delay Block 1.
-	erP6L = ewP6L = 0;										// Same As Delay Block 1
+	erP1L = ewP1L = 0;						// Same As Delay Block 1.
+	erP2L = ewP2L = 0;						// Same As Delay Block 1.
+	erP3L = ewP3L = 0;						// Same As Delay Block 1.
+	erP4L = ewP4L = 0;						// Same As Delay Block 1.
+	erP5L = ewP5L = 0;						// Same As Delay Block 1.
+	erP6L = ewP6L = 0;						// Same As Delay Block 1
 	memset(eBlock1L, 0, maxEcho1 * sizeof(float));			// Same As Delay Block 1.
-	echo1 = maxEcho1 * echoVar1;							// Same As Delay Block 1.
+	echo1 = maxEcho1 * echoVar1;					// Same As Delay Block 1.
 
     return PluginBase::reset(resetInfo);
 }
@@ -102,35 +102,35 @@ bool PluginCore::reset(ResetInfo& resetInfo)
 bool PluginCore::initialize(PluginInfo& pluginInfo)
 {
 	// -- Initialize Variables 
-	double LimiterMainL{};									// Initialization of Variables used for Processing frames for Envelope Shaper.
-	double EnvelopeShaperMainL{};							//
+	double LimiterMainL{};						// Initialization of Variables used for Processing frames for Envelope Shaper.
+	double EnvelopeShaperMainL{};					//
 
 	// -- FILTER ---------
-	z1L = z2L = z1R = z2R = 0.0;							// Sets Variables used in Filter to 0. 
+	z1L = z2L = z1R = z2R = 0.0;					// Sets Variables used in Filter to 0. 
 	
 	// -- DELAY BLOCK 1 --
-	maxDelay = getSampleRate();								// Max delay is referenced by the sample rate of what is being played always set to 1 second if getSampleRate() is not modified.
-	dBlock = new float[maxDelay];							// Creates a new float for dBlock that references the size of maxDelay ( getSampleRate(); ) as its max size. 
-	dBlockI = new float[maxDelay];							// Creates a new float for dBlockI that references the size of maxDelay ( getSampleRate(); ) as its max size. 
+	maxDelay = getSampleRate();					// Max delay is referenced by the sample rate of what is being played always set to 1 second if getSampleRate() is not modified.
+	dBlock = new float[maxDelay];					// Creates a new float for dBlock that references the size of maxDelay ( getSampleRate(); ) as its max size. 
+	dBlockI = new float[maxDelay];					// Creates a new float for dBlockI that references the size of maxDelay ( getSampleRate(); ) as its max size. 
 
 	// -- DELAY BLOCK 2 --
-	maxDelay2 = getSampleRate();							// Same As Delay Block 1.
-	dBlock2L = new float[maxDelay2];						// Same As Delay Block 1.
-	dBlock2R = new float[maxDelay2];						// Same As Delay Block 1.
+	maxDelay2 = getSampleRate();					// Same As Delay Block 1.
+	dBlock2L = new float[maxDelay2];				// Same As Delay Block 1.
+	dBlock2R = new float[maxDelay2];				// Same As Delay Block 1.
 
 	// -- DELAY BLOCK 3 --
-	maxDelay3 = getSampleRate();							// Same As Delay Block 1.
-	dBlock3L = new float[maxDelay3];						// Same As Delay Block 1.
-	dBlock3R = new float[maxDelay3];						// Same As Delay Block 1.
+	maxDelay3 = getSampleRate();					// Same As Delay Block 1.
+	dBlock3L = new float[maxDelay3];				// Same As Delay Block 1.
+	dBlock3R = new float[maxDelay3];				// Same As Delay Block 1.
 
 	// -- DELAY BLOCK 4 --
-	maxDelay4 = getSampleRate();							// Same As Delay Block 1.
-	dBlock4L = new float[maxDelay4];						// Same As Delay Block 1.
-	dBlock4R = new float[maxDelay4];						// Same As Delay Block 1.
+	maxDelay4 = getSampleRate();					// Same As Delay Block 1.
+	dBlock4L = new float[maxDelay4];				// Same As Delay Block 1.
+	dBlock4R = new float[maxDelay4];				// Same As Delay Block 1.
 	
 	// -- ECHO BLOCK 1 --
-	maxEcho1 = getSampleRate();								// Same As Delay Block 1 but process is used for Echo Block.
-	eBlock1L = new float[maxEcho1];							// Same As Delay Block 1 but process is used for Echo Block.
+	maxEcho1 = getSampleRate();					// Same As Delay Block 1 but process is used for Echo Block.
+	eBlock1L = new float[maxEcho1];					// Same As Delay Block 1 but process is used for Echo Block.
 
 	return true;
 }
@@ -683,9 +683,9 @@ bool PluginCore::postUpdatePluginParameter(int32_t controlID, double controlValu
 	switch (controlID)
 	{
 
-		// -- FILTER LOGIC -----------------------------------------------------------------------------------------------------//
+	// -- FILTER LOGIC -----------------------------------------------------------------------------------------------------//
 
-// This area Cooks the parameters/mathmatics of the plugin. 
+	// This area Cooks the parameters/mathmatics of the plugin. 
 
 	// Copyright RBJ Cook Book.
 	// Filter ("LP,HP,BP1,BP2,Notch,APF,PEQ,LShelf,HShelf")
@@ -801,7 +801,7 @@ bool PluginCore::postUpdatePluginParameter(int32_t controlID, double controlValu
 		case controlID::m_Boost1:
 		{
 			m_Boost.setBoost(Boost);	// Referencing Limiter.h for setBoost(); function call.
-			return true;				// handled : this is a break in the process so that each case is processed seperately. 
+			return true;			// handled : this is a break in the process so that each case is processed seperately. 
 		}
 
 		case controlID::m_Ceiling1:
