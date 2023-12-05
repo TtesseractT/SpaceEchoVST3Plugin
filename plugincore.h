@@ -22,7 +22,7 @@
 #include <cmath>
 
 enum controlID {
-	//-- Volume
+	//-- Volume ------------------- ID NO
 	volume,				// 0 
 
 	//-- Wet Dry Mix
@@ -32,7 +32,7 @@ enum controlID {
 	dist,				// 2 
 
 	//-- Distortion On/Off
-	voldistonoff,		// 3 
+	voldistonoff,			// 3 
 
 	//-- Delay Variables
 	delayVar,			// 4 
@@ -41,22 +41,22 @@ enum controlID {
 	delayVar4,			// 7 
 
 	//-- Delay Volume
-	delayOneVolume,		// 8 
-	delayTwoVolume,		// 9 
-	delayThreeVolume,	// 10
-	delayFourVolume,	// 11
+	delayOneVolume,			// 8 
+	delayTwoVolume,			// 9 
+	delayThreeVolume,		// 10
+	delayFourVolume,		// 11
 
 	//-- Delay On/Off
-	delay1onoff,		// 12
-	delay2onoff,		// 13
-	delay3onoff,		// 14
-	delay4onoff,		// 15
+	delay1onoff,			// 12
+	delay2onoff,			// 13
+	delay3onoff,			// 14
+	delay4onoff,			// 15
 
 	//-- Delay Filter Switches
-	delay1filteronoff,	// 16
-	delay2filteronoff,	// 17
-	delay3filteronoff,	// 18
-	delay4filteronoff,	// 19
+	delay1filteronoff,		// 16
+	delay2filteronoff,		// 17
+	delay3filteronoff,		// 18
+	delay4filteronoff,		// 19
 
 	//-- Echo Variables, Echo Volume, Echo Rate (Non defined yet)
 	echoVar1,			// 20
@@ -65,13 +65,13 @@ enum controlID {
 	echoRate,			// 23
 
 	//-- Filter Type Parameters
-	f0,					// 24
-	Q,					// 25
+	f0,				// 24
+	Q,				// 25
 	FilterType,			// 26
 	dbgain,				// 27
 
 	//-- Filter On / Off
-	mainFilterOnOff,	// 28
+	mainFilterOnOff,		// 28
 
 	//-- Echo On / Of	
 	echoOnOff,			// 29
@@ -104,7 +104,7 @@ enum controlID {
 	m_Ceiling1,			//46
 
 //Envelope Shaper
-	m_Envelope1,		//47
+	m_Envelope1,			//47
 	m_AttackInMilliseconds1,	//48
 	m_ReleaseInMilliseconds1,	//49
 	m_Attack1,			//50
@@ -115,10 +115,10 @@ enum controlID {
 	VuRMax,				//53
 
 	// Limiter Saturation
-	limiteronoff,		//54
+	limiteronoff,			//54
 
 	// Echo Feedback
-	echoFeedback		//55
+	echoFeedback			//55
 
 
 };
@@ -130,7 +130,7 @@ public:
 
 	/** Destructor: empty in default version */
     virtual ~PluginCore(){
-		delete[] dBlockI; // Deletes the values in memory when closed (Stops Leaking) 
+		delete[] dBlockI; 	// Deletes the values in memory when closed (Stops Leaking) 
 		delete[] dBlock;
 		delete[] dBlock2L;
 		delete[] dBlock2R;
