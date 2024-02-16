@@ -2,12 +2,8 @@
 //				Created by	: Sabian Hibbs
 //				institute	: University Of Derby 
 //				
-//				09/02/2022 - Fair Use Copyright
-//				**Not for Commercial Use** 
-// 
-//				Thanks to 
-//				Will Perkle (ASPik) 
-//				Dr Bruce Wiggins 
+//				09/02/2022 - MIT LICENCE
+//				*Updated 16/02/2024*
 // -----------------------------------------------------------------------------
 
 #include "plugincore.h"
@@ -49,88 +45,124 @@ bool PluginCore::reset(ResetInfo& resetInfo)
     audioProcDescriptor.sampleRate = resetInfo.sampleRate;
     audioProcDescriptor.bitDepth = resetInfo.bitDepth;
 
-	// -- ENVELOPE SHAPER Prepare for audio -- //
-	m_Boost.prepareForPlayback(getSampleRate());			// Resets Memory usage for function Envelope Shaper to start taking samples for processing.
-	m_Ceiling.prepareForPlayback(getSampleRate());			//
-	m_Attack.prepareForPlayback(getSampleRate());			//
-	m_Release.prepareForPlayback(getSampleRate());			//
+	
+	/* // -- ENVELOPE SHAPER Prepare for audio -- //
+	 * Resets Memory usage for function Envelope Shaper to start taking samples for processing.
+	*/
+	m_Boost.prepareForPlayback(getSampleRate());			
+	m_Ceiling.prepareForPlayback(getSampleRate());			
+	m_Attack.prepareForPlayback(getSampleRate());			
+	m_Release.prepareForPlayback(getSampleRate());			
 
-	// -- Filters ---------------------------- //
-	z1L = z2L = z1R = z2R = 0.0;					// Resets Variables used in the Filter stage. 
+	/*// -- Filters ---------------------------- //
+	 * Resets Variables used in the Filter stage.
+	*/
+	z1L = z2L = z1R = z2R = 0.0; 
 
-	// -- Delay Block 1----------------------- //
-	rPtr = wPtr = 0;						// Resets the Write, Read pointer to 0, for Left.
-	rPtrI = wPtrI = 0;						// Resets the Write, Read pointer to 0, for Right.
-	memset(dBlock, 0, maxDelay * sizeof(float));			// Resets the memory buffer used in dBlock to 0 referencing the maxDelay. Process for Left Channel.
-	memset(dBlockI, 0, maxDelay * sizeof(float));			// Resets the memory buffer used in dBlockI to 0 referencing the maxDelay. Process for Right Channel.
-	delay = maxDelay * delayVar;					// Redefention of delay with variables used outside ( PluginCore::reset(ResetInfo& resetInfo) ).
+	/* // -- Delay Block 1----------------------- //
+	 * Resets the Write, Read pointer to 0, for Left.
+	 * Resets the Write, Read pointer to 0, for Right.
+	 * Resets the memory buffer used in dBlock to 0 referencing the maxDelay. Process for Left Channel.
+	 * Resets the memory buffer used in dBlockI to 0 referencing the maxDelay. Process for Right Channel.
+	 * Redefention of delay with variables used outside ( PluginCore::reset(ResetInfo& resetInfo) ).
+	*/
+	rPtr = wPtr = 0;										
+	rPtrI = wPtrI = 0;										
+	memset(dBlock, 0, maxDelay * sizeof(float));			
+	memset(dBlockI, 0, maxDelay * sizeof(float));			
+	delay = maxDelay * delayVar;							
 
-	// -- Delay Block 2----------------------- //
-	rPtr2L = wPtr2L = 0;						// Same As Delay Block 1.
-	rPtr2R = wPtr2R = 0;						// Same As Delay Block 1.
-	memset(dBlock2L, 0, maxDelay2 * sizeof(float));			// Same As Delay Block 1.
-	memset(dBlock2R, 0, maxDelay2 * sizeof(float));			// Same As Delay Block 1.
-	delay2 = maxDelay2 * delayVar2;					// Same As Delay Block 1.
+	/*
+	 * Delay Block 2
+	*/
+	rPtr2L = wPtr2L = 0;									
+	rPtr2R = wPtr2R = 0;									
+	memset(dBlock2L, 0, maxDelay2 * sizeof(float));			
+	memset(dBlock2R, 0, maxDelay2 * sizeof(float));			
+	delay2 = maxDelay2 * delayVar2;							
 
-	// -- Delay Block 3----------------------- //
-	rPtr3L = wPtr3L = 0;						// Same As Delay Block 1.
-	rPtr3R = wPtr3R = 0;						// Same As Delay Block 1.
-	memset(dBlock3L, 0, maxDelay3 * sizeof(float));			// Same As Delay Block 1.
-	memset(dBlock3R, 0, maxDelay3 * sizeof(float));			// Same As Delay Block 1.
-	delay3 = maxDelay3 * delayVar3;					// Same As Delay Block 1.
+	/*
+	 * Delay Block 3
+	*/
+	rPtr3L = wPtr3L = 0;						
+	rPtr3R = wPtr3R = 0;						
+	memset(dBlock3L, 0, maxDelay3 * sizeof(float));
+	memset(dBlock3R, 0, maxDelay3 * sizeof(float));
+	delay3 = maxDelay3 * delayVar3;
 
-	// -- Delay Block 4----------------------- //
-	rPtr4L = wPtr4L = 0;						// Same As Delay Block 1.
-	rPtr4R = wPtr4R = 0;						// Same As Delay Block 1.
-	memset(dBlock4L, 0, maxDelay4 * sizeof(float));			// Same As Delay Block 1.
-	memset(dBlock4R, 0, maxDelay4 * sizeof(float));			// Same As Delay Block 1.
-	delay4 = maxDelay4 * delayVar4;					// Same As Delay Block 1.
+	/*
+	 * Delay Block 4
+	*/
+	rPtr4L = wPtr4L = 0;
+	rPtr4R = wPtr4R = 0;
+	memset(dBlock4L, 0, maxDelay4 * sizeof(float));
+	memset(dBlock4R, 0, maxDelay4 * sizeof(float));
+	delay4 = maxDelay4 * delayVar4;
 
-	//Echo Block 1---------------------------- //
-	erP1L = ewP1L = 0;						// Same As Delay Block 1.
-	erP2L = ewP2L = 0;						// Same As Delay Block 1.
-	erP3L = ewP3L = 0;						// Same As Delay Block 1.
-	erP4L = ewP4L = 0;						// Same As Delay Block 1.
-	erP5L = ewP5L = 0;						// Same As Delay Block 1.
-	erP6L = ewP6L = 0;						// Same As Delay Block 1
-	memset(eBlock1L, 0, maxEcho1 * sizeof(float));			// Same As Delay Block 1.
-	echo1 = maxEcho1 * echoVar1;					// Same As Delay Block 1.
+	/*
+	 * Echo Block 1
+	*/
+	erP1L = ewP1L = 0;
+	erP2L = ewP2L = 0;
+	erP3L = ewP3L = 0;
+	erP4L = ewP4L = 0;
+	erP5L = ewP5L = 0;
+	erP6L = ewP6L = 0;
+	memset(eBlock1L, 0, maxEcho1 * sizeof(float));
+	echo1 = maxEcho1 * echoVar1;
 
     return PluginBase::reset(resetInfo);
 }
 
 bool PluginCore::initialize(PluginInfo& pluginInfo)
 {
-	// -- Initialize Variables 
-	double LimiterMainL{};						// Initialization of Variables used for Processing frames for Envelope Shaper.
-	double EnvelopeShaperMainL{};					//
+	/* Initialize Variables
+	 * Initialization of Variables used for Processing frames for Envelope Shaper.
+	*/ 
+	double LimiterMainL{};
+	double EnvelopeShaperMainL{};
 
-	// -- FILTER ---------
-	z1L = z2L = z1R = z2R = 0.0;					// Sets Variables used in Filter to 0. 
+	/*
+	 * Sets Variables used in Filter to 0. 
+	*/
+	z1L = z2L = z1R = z2R = 0.0;
 	
-	// -- DELAY BLOCK 1 --
-	maxDelay = getSampleRate();					// Max delay is referenced by the sample rate of what is being played always set to 1 second if getSampleRate() is not modified.
-	dBlock = new float[maxDelay];					// Creates a new float for dBlock that references the size of maxDelay ( getSampleRate(); ) as its max size. 
-	dBlockI = new float[maxDelay];					// Creates a new float for dBlockI that references the size of maxDelay ( getSampleRate(); ) as its max size. 
+	/*
+	 * Max delay is referenced by the sample rate of what is being 
+	   played always set to 1 second if getSampleRate() is not modified.
+	 * Creates a new float for dBlock that references the size of 
+	   maxDelay ( getSampleRate(); ) as its max size. 				
+	*/
+	maxDelay = getSampleRate();						
+	dBlock = new float[maxDelay];					
+	dBlockI = new float[maxDelay];					
 
-	// -- DELAY BLOCK 2 --
-	maxDelay2 = getSampleRate();					// Same As Delay Block 1.
-	dBlock2L = new float[maxDelay2];				// Same As Delay Block 1.
-	dBlock2R = new float[maxDelay2];				// Same As Delay Block 1.
+	/*
+	 * DELAY BLOCK 2
+	*/
+	maxDelay2 = getSampleRate();
+	dBlock2L = new float[maxDelay2];
+	dBlock2R = new float[maxDelay2];
 
-	// -- DELAY BLOCK 3 --
-	maxDelay3 = getSampleRate();					// Same As Delay Block 1.
-	dBlock3L = new float[maxDelay3];				// Same As Delay Block 1.
-	dBlock3R = new float[maxDelay3];				// Same As Delay Block 1.
+	/*
+	 * DELAY BLOCK 3
+	*/
+	maxDelay3 = getSampleRate();
+	dBlock3L = new float[maxDelay3];
+	dBlock3R = new float[maxDelay3];
 
-	// -- DELAY BLOCK 4 --
-	maxDelay4 = getSampleRate();					// Same As Delay Block 1.
-	dBlock4L = new float[maxDelay4];				// Same As Delay Block 1.
-	dBlock4R = new float[maxDelay4];				// Same As Delay Block 1.
+	/*
+	 * DELAY BLOCK 4
+	*/
+	maxDelay4 = getSampleRate();
+	dBlock4L = new float[maxDelay4];
+	dBlock4R = new float[maxDelay4];
 	
-	// -- ECHO BLOCK 1 --
-	maxEcho1 = getSampleRate();					// Same As Delay Block 1 but process is used for Echo Block.
-	eBlock1L = new float[maxEcho1];					// Same As Delay Block 1 but process is used for Echo Block.
+	/*
+	 * ECHO BLOCK 1
+	*/
+	maxEcho1 = getSampleRate();
+	eBlock1L = new float[maxEcho1];
 
 	return true;
 }
@@ -684,10 +716,7 @@ bool PluginCore::postUpdatePluginParameter(int32_t controlID, double controlValu
 	{
 
 	// -- FILTER LOGIC -----------------------------------------------------------------------------------------------------//
-
 	// This area Cooks the parameters/mathmatics of the plugin. 
-
-	// Copyright RBJ Cook Book.
 	// Filter ("LP,HP,BP1,BP2,Notch,APF,PEQ,LShelf,HShelf")
 	// All rightes reserved ( Open Source Code ). 
 		{
